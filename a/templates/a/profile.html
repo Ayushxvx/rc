@@ -1,0 +1,130 @@
+<!-- profile.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ user.username }}'s Profile</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white">
+
+    <!-- Navbar -->
+    <nav class="flex justify-between items-center p-6 bg-gray-800 shadow-lg">
+        <div class="text-2xl font-bold text-cyan-400">Event Horizon Network</div>
+        <div class="flex space-x-6">
+            <a href="/" class="text-white cursor-pointer hover:text-cyan-400 transition duration-300">Home</a>
+            <a href="/posts" class="text-white cursor-pointer hover:text-cyan-400 transition duration-300">All Posts</a>
+        </div>
+    </nav>
+
+    <!-- Profile Section -->
+    <div class="min-h-screen bg-gray-900 text-white flex items-center justify-center p-6">
+        <div class="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-4xl">
+            <!-- Profile Info -->
+            <h2 class="text-3xl font-bold text-cyan-400 mb-6">{{ user.username }}'s Profile</h2>
+
+
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold text-cyan-400">Booked Posts</h3>
+                <div class="space-y-4">
+                    {% for post in booked_posts %}
+                        <div class="bg-gray-700 p-4 rounded-lg">
+                            <h4 class="text-lg text-cyan-400">{{ post.title }}</h4>
+                            <p class="text-gray-300">{{ post.description }}</p>
+                            <p class="text-gray-500">{{ post.location }}</p>
+                            <p class="text-gray-500">Ticket Fare: ${{ post.adjusted_ticket_fare }}</p>
+                            <a href="{% url 'elaborate' post.id %}" class="text-blue-500">View Details</a> <br>
+                            {% for ticket in post.ticket.all %}
+                            {% if ticket.buyer == user %}
+                                <a href="{% url 'download_ticket' ticket.id %}" class="text-blue-500 mt-4 inline-block">Download Your Ticket</a><br>
+                            {% endif %}
+                        {% endfor %}
+                        
+                        </div>
+                    {% empty %}
+                        <p class="text-gray-300">No booked posts.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Liked Posts -->
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold text-cyan-400">Liked Posts</h3>
+                <div class="space-y-4">
+                    {% for post in liked_posts %}
+                    <a href="{% url 'elaborate' id=post.id %}">
+                        <div class="bg-gray-700 p-4 rounded-lg">
+                            <h4 class="text-lg text-cyan-400">{{ post.title }}</h4>
+                            <p class="text-gray-300">{{ post.description }}</p>
+                        </div>
+                        </a>
+                    {% empty %}
+                        <p class="text-gray-300">No liked posts.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Disliked Posts -->
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold text-cyan-400">Disliked Posts</h3>
+                <div class="space-y-4">
+                    {% for post in disliked_posts %}
+                    <a href="{% url 'elaborate' id=post.id %}">
+                        <div class="bg-gray-700 p-4 rounded-lg">
+                            <h4 class="text-lg text-cyan-400">{{ post.title }}</h4>
+                            <p class="text-gray-300">{{ post.description }}</p>
+                        </div>
+                        </a>
+                    {% empty %}
+                        <p class="text-gray-300">No disliked posts.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Commented Posts -->
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold text-cyan-400">Commented Posts</h3>
+                <div class="space-y-4">
+                    {% for post in commented_posts %}
+                    <a href="{% url 'elaborate' id=post.id %}">
+                        <div class="bg-gray-700 p-4 rounded-lg">
+                            <h4 class="text-lg text-cyan-400">{{ post.title }}</h4>
+                            <p class="text-gray-300">{{ post.description }}</p>
+                        </div>
+                        </a>
+                    {% empty %}
+                        <p class="text-gray-300">No commented posts.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Hosted Events (if host) -->
+            {% if user_type == "host" %}
+                <div class="mb-6">
+                    <h3 class="text-xl font-semibold text-cyan-400">Your Hosted Events</h3>
+                    <div class="space-y-4">
+                        {% for event in hosted_events %}
+                        <a href="{% url 'elaborate' id=event.id %}">
+                            <div class="bg-gray-700 p-4 rounded-lg">
+                                <h4 class="text-lg text-cyan-400">{{ event.title }}</h4>
+                                <p class="text-gray-300">{{ event.description }}</p>
+                                <p class="text-gray-500">Location: {{ event.location }}</p>
+                            </div>
+                            </a>
+                        {% empty %}
+                            <p class="text-gray-300">You haven't hosted any events yet.</p>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white p-4 text-center mt-12">
+        <p>&copy; 2025 Event Horizon Network. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

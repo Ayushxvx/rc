@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="min-h-screen bg-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-md w-full bg-gray-800 shadow-lg rounded-lg p-8 space-y-6">
+                <div class="flex justify-between items-center mb-4">
+                    <a href="/" class="text-indigo-400 hover:text-indigo-500">Home</a>
+                    <a href="/signup" class="text-indigo-400 hover:text-indigo-500">Sign Up</a>
+                </div>
+                <h2 class="text-3xl font-bold text-center text-white">Login</h2>
+
+                {% for m in messages %}
+                <div class="text-center p-4 rounded-md bg-cyan-800 text-white">
+                    {{ m }}
+                </div>
+                {% endfor %}
+
+                <form class="space-y-6" method="POST" action="http://localhost:8000/login">
+                    <div>
+                        <label for="username" class="block text-sm font-medium text-gray-300">Username</label>
+                        <input
+                            id="username"
+                            name="username"
+                            type="text"
+                            required
+                            class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md bg-gray-700 text-white"
+                        />
+                    </div>
+
+                    <div>
+                        <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
+                        <input
+                            id="password"
+                            name="password"
+                            type="password"
+                            required
+                            class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md bg-gray-700 text-white"
+                        />
+                    </div>
+
+                    <div>
+                        <button
+                            type="submit"
+                            class="w-full py-2 px-4 border rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                        >
+                            Log In
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

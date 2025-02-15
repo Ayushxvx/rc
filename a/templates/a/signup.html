@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <form method="POST">
+        {% csrf_token %}
+        <div class="min-h-screen bg-gray-900 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+            <div class="max-w-md w-full bg-gray-800 shadow-lg rounded-lg p-8 space-y-6">
+              <h2 class="text-3xl font-bold text-center text-white">Create an Account</h2>
+      
+              {% for msg in messages %}
+                <div class="text-center p-4 rounded-md bg-cyan-800 text-white">
+                  {{msg}}
+                </div>
+              {% endfor %}
+      
+              <form class="space-y-6" onSubmit={handleSubmit}>
+                <div>
+                  <label for="username" class="block text-sm font-medium text-gray-300">Username</label>
+                  <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md bg-gray-700 text-white"
+                  />
+                </div>
+      
+                <div>
+                  <label for="email" class="block text-sm font-medium text-gray-300">Email</label>
+                  <input
+                    id="email"
+                    name="email"
+                    type="email"
+                    required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md bg-gray-700 text-white"
+                  />
+                </div>
+      
+                <div>
+                  <label for="password" class="block text-sm font-medium text-gray-300">Password</label>
+                  <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md bg-gray-700 text-white"
+                  />
+                </div>
+      
+                <div>
+                  <label for="usertype" class="block text-sm font-medium text-gray-300">User Type</label>
+                  <select
+                    id="usertype"
+                    name="usertype"
+                    required
+                    class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md bg-gray-700 text-white"
+                  >
+                    <option value="" disabled>Select user type</option>
+                    <option value="host">Host</option>
+                    <option value="attendee">Attendee</option>
+                  </select>
+                </div>
+      
+                  <div id="dp">
+                    <label for="documentProof" class="block text-sm font-medium text-gray-300">Upload Document Proof '(Only for Hosts)'</label>
+                    <input
+                      id="documentProof"
+                      name="documentProof"
+                      type="file"
+                      class="mt-1 block w-full text-sm file:bg-indigo-900 file:text-indigo-100"
+                    />
+                  </div>
+      
+                  <div>
+                    <label for="phoneNo" class="block text-sm font-medium text-gray-300">Contact Number </label>
+                    <input
+                      id="phoneNo"
+                      name="phoneno"
+                      required
+                      type="number"
+                      class="mt-1 block w-full px-3 py-2 border border-gray-600 rounded-md bg-gray-700 text-white"
+                    />
+                  </div>
+                <div>
+                  <button
+                    type="submit"
+                    class="w-full py-2 px-4 border rounded-md text-white bg-indigo-600 hover:bg-indigo-700"
+                  >
+                    Sign Up
+                  </button>
+                </div>
+              </form>
+              <div class="text-center">
+                <a href="/login" class="text-indigo-400 hover:text-indigo-500">Already have an account? Log In</a>
+              </div>
+              <div class="text-center mt-4">
+                <a href="/" class="text-indigo-400 hover:text-indigo-500">Go to Home</a>
+              </div>
+            </div>
+          </div>
+    </form>
+      
+</body>
+</html>

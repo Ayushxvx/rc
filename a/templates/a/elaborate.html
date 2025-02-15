@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ post.title }} - Event Details</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-900 text-white">
+
+    <!-- Navbar -->
+    <nav class="flex justify-between items-center p-6 bg-gray-800 shadow-lg">
+        <div class="text-2xl font-bold text-cyan-400">Event Horizon Network</div>
+        <div class="flex space-x-6">
+            <a href="/" class="text-white cursor-pointer hover:text-cyan-400 transition duration-300">Home</a>
+            <a href="/posts" class="text-white cursor-pointer hover:text-cyan-400 transition duration-300">All Posts</a>
+        </div>
+    </nav>
+
+    <!-- Main Content Section -->
+    <div class="min-h-screen bg-gray-900 text-white flex items-center justify-center p-6">
+        <div class="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-4xl">
+            <!-- Post Title -->
+            <h2 class="text-3xl font-bold text-cyan-400 mb-6">{{ post.title }}</h2>
+
+            <!-- Post Details -->
+            <div class="mb-4">
+                <h3 class="text-xl font-semibold text-cyan-400">Description</h3>
+                <p class="text-gray-300">{{ post.description }}</p>
+            </div>
+
+            <!-- Event Date -->
+            <div class="mb-4">
+                <h3 class="text-xl font-semibold text-cyan-400">Event Date</h3>
+                <p class="text-gray-300">{{ post.event_date|date:"F j, Y, g:i a" }}</p>
+            </div>
+
+            <!-- Location -->
+            <div class="mb-4">
+                <h3 class="text-xl font-semibold text-cyan-400">Location</h3>
+                <p class="text-gray-300">{{ post.location }}</p>
+            </div>
+
+            <!-- Host -->
+            <div class="mb-4">
+                <h3 class="text-xl font-semibold text-cyan-400">Host</h3>
+                <p class="text-gray-300">{{ post.author }}</p>
+            </div>
+
+            <!-- Ticket Fare -->
+            <div class="mb-4">
+                <h3 class="text-xl font-semibold text-cyan-400">Ticket Fare</h3>
+                <p class="text-gray-300">${{ post.adjusted_ticket_fare }}</p>
+            </div>
+
+            <!-- Status -->
+            <div class="mb-4">
+                <h3 class="text-xl font-semibold text-cyan-400">Status</h3>
+                <p class="text-gray-300">{{ post.status|capfirst }}</p>
+            </div>
+
+            <!-- Book Button -->
+            <div class="mb-4">
+                {% if post.event_date > now %}
+                    <a href="{% url 'book_ticket' id=post.id price=post.adjusted_ticket_fare %}">
+                        <button class="w-full bg-cyan-500 text-white py-2 px-4 rounded-md hover:bg-cyan-600 focus:outline-none focus:ring-2 focus:ring-cyan-400">
+                            Book Now ( {{bookings}} tickets have been sold ) <br>
+                            {% if ub %}
+                            You have booked this event already.
+                            {% endif %}
+                        </button>
+                    </a>
+                {% else %}
+                    <p class="text-red-500">This event is no longer available for booking.</p>
+                {% endif %}
+            </div>
+
+            <!-- Like and Dislike Buttons -->
+            <div class="mb-4 flex items-center space-x-4">
+                <form method="POST" action="{% url 'like' id=post.id %}">
+                    {% csrf_token %}
+                    <button type="submit" name="like" class="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600 focus:outline-none">{% if liked %} Liked {% else %} Like {% endif %}</button>
+                </form>
+                <span class="text-gray-300">{{ likes }} Likes</span>
+                
+                <form method="POST" action="{% url 'dislike' id=post.id %}">
+                    {% csrf_token %}
+                    <button type="submit" name="dislike" class="bg-red-500 text-white py-2 px-4 rounded-md hover:bg-red-600 focus:outline-none">{% if disliked %} Disliked {% else %} Dislike {% endif %}</button>
+                </form>
+                <span class="text-gray-300">{{ dislikes }} Dislikes</span>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="mb-6">
+                <h3 class="text-xl font-semibold text-cyan-400">Comments</h3>
+                <div class="space-y-4">
+                    {% for comment in u_comments %}
+                        <div class="bg-gray-700 p-4 rounded-lg">
+                            <p class="text-gray-300">{{ comment.text }}</p>
+                            <p class="text-gray-500 text-sm">By: {{ comment.author.username }} | {{ comment.created_at|date:"F j, Y, g:i a" }}</p>
+                            <a href="{% url 'del_comment' id=comment.id %}">
+                                <button class="bg-red-500 p-2 text-white text-center rounded-md m-2">
+                                    Delete
+                                </button>
+                            </a>
+                        </div>
+                    {% endfor %}
+                    {% for comment in all_comments %}
+                        <div class="bg-gray-700 p-4 rounded-lg">
+                            <p class="text-gray-300">{{ comment.text }}</p>
+                            <p class="text-gray-500 text-sm">By: {{ comment.author.username }} | {{ comment.created_at|date:"F j, Y, g:i a" }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <!-- Add a New Comment -->
+                <div class="mt-6">
+                    <h4 class="text-lg font-semibold text-cyan-400">Leave a Comment</h4>
+                    <form method="POST" action="{% url 'add_comment' post.id %}">
+                        {% csrf_token %}
+                        <textarea name="comment_content" rows="4" class="w-full bg-gray-700 text-white p-4 rounded-md" placeholder="Write your comment..." required></textarea>
+                        <button type="submit" class="w-full bg-cyan-500 text-white py-2 px-4 rounded-md hover:bg-cyan-600 focus:outline-none mt-4">Submit Comment</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Back Button -->
+            <div class="text-center">
+                <a href="/posts" class="text-cyan-400 hover:underline">Back to All Posts</a>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white p-4 text-center mt-12">
+        <p>&copy; 2025 Event Horizon Network. All rights reserved.</p>
+    </footer>
+</body>
+</html>

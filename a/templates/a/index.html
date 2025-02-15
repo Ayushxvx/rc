@@ -1,0 +1,56 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Event Horizon Network</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body>
+    <div class="bg-gray-900 text-white">
+        <nav class="flex justify-between items-center p-6 bg-gray-800 shadow-lg">
+            <div class="text-2xl font-bold text-cyan-400">Event Horizon Network</div>
+           {% if request.user.is_authenticated %}
+           <div class="flex space-x-6">
+            <a href="/logout" class="text-white cursor-pointer hover:text-cyan-400 transition duration-300">Logout</a>
+            <a href="/profile" class="text-white cursor-pointer hover:text-cyan-400 transition duration-300">Profile</a>
+            {% if utype == "host" %}
+            <a href="/subscribe" class="text-white cursor-pointer hover:text-cyan-400 transition duration-300">Subscription Details</a>
+            {% endif %}
+           </div>
+           {% else %}
+           <div class="flex space-x-6">
+            <a href="/login" class="text-white hover:text-cyan-400 transition duration-300">Login</a>
+            <a href="/signup" class="text-white hover:text-cyan-400 transition duration-300">Signup</a>
+        </div>
+           {% endif %}
+        </nav>
+    
+        <section class="hero-gradient flex flex-col justify-center items-center h-screen text-center">
+            <img src="{% static 'a/home_img.webp' %}" class="w-10/12 sm:w-8/12 md:w-6/12 rounded-xl m-2 "/>
+            <h1 class="text-5xl font-bold text-cyan-400 mb-4">Welcome to Event Horizon Network</h1>
+            <p class="text-xl text-gray-300 mb-8 max-w-2xl">
+                Your ultimate platform for event hosts and attendees to connect, collaborate, and create unforgettable experiences.
+            </p>
+            <div class="flex space-x-4">
+                <a href="posts" class="px-6 py-2 border-2 border-cyan-400 text-cyan-400 rounded-lg hover:bg-cyan-400 hover:text-gray-900 transition duration-300">
+                    Explore Events
+                </a>
+                {% if utype == "host" %}
+                <a href="addpost" class="px-6 py-2 border-2 border-cyan-400 text-cyan-400 rounded-lg hover:bg-cyan-400 hover:text-gray-900 transition duration-300">
+                    Host an Event
+                </a>
+                {% endif %}
+            </div>
+        </section>
+    
+        <footer class="bg-gray-800 text-center py-6">
+            <p class="text-gray-300">
+                &copy; 2023 Event Horizon Network. All rights reserved. | 
+                <a href="#" class="text-cyan-400 hover:underline">Privacy Policy</a>
+            </p>
+        </footer>
+        </div>
+</body>
+</html>
